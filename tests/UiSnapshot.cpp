@@ -6,7 +6,7 @@
 int main (int argc, char** argv)
 {
     juce::ScopedJuceInitialiser_GUI gui;
-    FourierTruncatorProcessor processor;
+    ThinampProcessor processor;
     processor.setRateAndBufferSizeDetails (48000.0, 512);
     processor.prepareToPlay (48000.0, 512);
 
@@ -43,7 +43,7 @@ int main (int argc, char** argv)
         juce::MessageManager::getInstance()->runDispatchLoopUntil (5);
     }
 
-    auto image = editor->createComponentSnapshot (editor->getLocalBounds(), true, 1.0f);
+    auto image = editor->createComponentSnapshot (editor->getLocalBounds(), true, 2.0f);
     juce::File out (juce::File::getCurrentWorkingDirectory().getChildFile (argc > 1 ? argv[1] : "ui.png"));
     out.deleteFile();
     juce::FileOutputStream stream (out);

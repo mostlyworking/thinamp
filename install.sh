@@ -1,10 +1,10 @@
 #!/bin/bash
-# Installs Fourier Truncator (VST3 + AU) for the current user. No admin password or developer tools needed.
-#   Online:  curl -fsSL https://raw.githubusercontent.com/mostlyworking/fourier-truncator/main/install.sh | bash
-#   Offline: double-click "Install Fourier Truncator.command" inside the release zip.
+# Installs Thinamp (VST3 + AU) for the current user. No admin password or developer tools needed.
+#   Online:  curl -fsSL https://raw.githubusercontent.com/mostlyworking/thinamp/main/install.sh | bash
+#   Offline: double-click "Install Thinamp.command" inside the release zip.
 set -euo pipefail
 
-url="https://github.com/mostlyworking/fourier-truncator/releases/latest/download/FourierTruncator-mac.zip"
+url="https://github.com/mostlyworking/thinamp/releases/latest/download/Thinamp-mac.zip"
 vst3_dir="$HOME/Library/Audio/Plug-Ins/VST3"
 au_dir="$HOME/Library/Audio/Plug-Ins/Components"
 
@@ -12,13 +12,13 @@ au_dir="$HOME/Library/Audio/Plug-Ins/Components"
 src=""
 if [[ -n "${BASH_SOURCE[0]:-}" && -f "${BASH_SOURCE[0]}" ]]; then
     here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    [[ -d "$here/Fourier Truncator.vst3" ]] && src="$here"
+    [[ -d "$here/Thinamp.vst3" ]] && src="$here"
 fi
 
 if [[ -z "$src" ]]; then
     tmp=$(mktemp -d)
     trap 'rm -rf "$tmp"' EXIT
-    echo "Downloading Fourier Truncator..."
+    echo "Downloading Thinamp..."
     curl -fL --progress-bar "$url" -o "$tmp/ft.zip"
     ditto -x -k "$tmp/ft.zip" "$tmp/unzipped"
     src="$tmp/unzipped"
@@ -26,23 +26,25 @@ fi
 
 echo "Installing..."
 mkdir -p "$vst3_dir" "$au_dir"
+# Remove copies installed under the plugin's old name (same plugin ID, would show up twice).
 rm -rf "$vst3_dir/Fourier Truncator.vst3" "$au_dir/Fourier Truncator.component"
-ditto "$src/Fourier Truncator.vst3" "$vst3_dir/Fourier Truncator.vst3"
-ditto "$src/Fourier Truncator.component" "$au_dir/Fourier Truncator.component"
+rm -rf "$vst3_dir/Thinamp.vst3" "$au_dir/Thinamp.component"
+ditto "$src/Thinamp.vst3" "$vst3_dir/Thinamp.vst3"
+ditto "$src/Thinamp.component" "$au_dir/Thinamp.component"
 
 # The plugin isn't notarized by Apple; clearing the download flag stops macOS from blocking it.
-xattr -dr com.apple.quarantine "$vst3_dir/Fourier Truncator.vst3" "$au_dir/Fourier Truncator.component" 2>/dev/null || true
+xattr -dr com.apple.quarantine "$vst3_dir/Thinamp.vst3" "$au_dir/Thinamp.component" 2>/dev/null || true
 
 # Ask macOS to re-scan Audio Units.
 killall -9 AudioComponentRegistrar 2>/dev/null || true
 
 cat <<'DONE'
 
-Fourier Truncator is installed.
+Thinamp is installed.
 
-Restart your DAW (or rescan plugins) and look for "Fourier Truncator".
+Restart your DAW (or rescan plugins) and look for "Thinamp".
 
 Ableton Live: Settings > Plug-Ins, turn on "Use VST3 Plug-In System Folders", click Rescan.
-Other DAWs: https://github.com/mostlyworking/fourier-truncator#finding-it-in-your-daw
+Other DAWs: https://github.com/mostlyworking/thinamp#finding-it-in-your-daw
 
 DONE

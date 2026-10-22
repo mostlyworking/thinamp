@@ -3,10 +3,10 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "TruncatorEngine.h"
 
-class FourierTruncatorProcessor final : public juce::AudioProcessor
+class ThinampProcessor final : public juce::AudioProcessor
 {
 public:
-    FourierTruncatorProcessor();
+    ThinampProcessor();
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
@@ -47,5 +47,5 @@ private:
     std::atomic<float>* modeParam = nullptr;
     std::atomic<double> displaySampleRate { 44100.0 };
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FourierTruncatorProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ThinampProcessor)
 };

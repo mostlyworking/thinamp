@@ -151,7 +151,7 @@ void ModeButtons::mouseDown (const juce::MouseEvent& e)
 }
 
 //==============================================================================
-FourierTruncatorEditor::FourierTruncatorEditor (FourierTruncatorProcessor& p)
+ThinampEditor::ThinampEditor (ThinampProcessor& p)
     : AudioProcessorEditor (p),
       truncator (p),
       nAttachment (p.apvts, "n", nSlider),
@@ -176,13 +176,13 @@ FourierTruncatorEditor::FourierTruncatorEditor (FourierTruncatorProcessor& p)
     startTimerHz (30);
 }
 
-FourierTruncatorEditor::~FourierTruncatorEditor()
+ThinampEditor::~ThinampEditor()
 {
     nSlider.setLookAndFeel (nullptr);
     mixSlider.setLookAndFeel (nullptr);
 }
 
-void FourierTruncatorEditor::resized()
+void ThinampEditor::resized()
 {
     mixSlider.setBounds (scaled (107, 56, 108, 11));
     nSlider.setBounds (scaled (16, 71, 248, 10));
@@ -190,7 +190,7 @@ void FourierTruncatorEditor::resized()
                                                 - ModeButtons::gap, 17));
 }
 
-void FourierTruncatorEditor::timerCallback()
+void ThinampEditor::timerCallback()
 {
     auto& spectrum = truncator.spectrum();
     const float barHeight = analyzerBox.getHeight();
@@ -222,7 +222,7 @@ void FourierTruncatorEditor::timerCallback()
     const int mix = juce::roundToInt (truncator.apvts.getRawParameterValue ("mix")->load() * 100.0f);
     const int kept = mode == (int) ft::Mode::Odd ? juce::jmin (n, ft::numBins / 2) : n;
 
-    const auto text = juce::String ("***  FOURIER TRUNCATOR  ***  ") + modeLongNames[mode] + "  ***  "
+    const auto text = juce::String ("***  THINAMP  ***  ") + modeLongNames[mode] + "  ***  "
                     + juce::String (kept) + " OF " + juce::String (ft::numBins) + " BASIS FUNCTIONS  ***  DRY/WET "
                     + juce::String (mix) + "%  ";
 
@@ -241,7 +241,7 @@ void FourierTruncatorEditor::timerCallback()
     repaint();
 }
 
-void FourierTruncatorEditor::paint (Graphics& g)
+void ThinampEditor::paint (Graphics& g)
 {
     g.addTransform (juce::AffineTransform::scale (ft::ui::scale));
 
@@ -270,7 +270,7 @@ void FourierTruncatorEditor::paint (Graphics& g)
     g.drawText ("F(w)", logo, juce::Justification::centred, false);
 }
 
-void FourierTruncatorEditor::drawTitleBar (Graphics& g)
+void ThinampEditor::drawTitleBar (Graphics& g)
 {
     const Rectangle<float> bar (1, 1, (float) ft::ui::baseWidth - 2, 13);
     g.setGradientFill (ColourGradient (palette::titleTop, 0, bar.getY(), palette::titleBottom, 0, bar.getBottom(), false));
@@ -305,10 +305,10 @@ void FourierTruncatorEditor::drawTitleBar (Graphics& g)
 
     g.setColour (palette::titleText);
     g.setFont (lcdFont (7.0f));
-    g.drawText ("FOURIER TRUNCATOR", Rectangle<float> (84, 1, 107, 13), juce::Justification::centred, false);
+    g.drawText ("THINAMP", Rectangle<float> (84, 1, 107, 13), juce::Justification::centred, false);
 }
 
-void FourierTruncatorEditor::drawLcd (Graphics& g)
+void ThinampEditor::drawLcd (Graphics& g)
 {
     g.setColour (palette::lcd);
     g.fillRect (lcdBox);
@@ -353,7 +353,7 @@ void FourierTruncatorEditor::drawLcd (Graphics& g)
     }
 }
 
-void FourierTruncatorEditor::drawMarquee (Graphics& g)
+void ThinampEditor::drawMarquee (Graphics& g)
 {
     g.setColour (palette::lcd);
     g.fillRect (marqueeBox);
@@ -369,7 +369,7 @@ void FourierTruncatorEditor::drawMarquee (Graphics& g)
                     juce::Justification::centredLeft, false);
 }
 
-void FourierTruncatorEditor::drawReadouts (Graphics& g)
+void ThinampEditor::drawReadouts (Graphics& g)
 {
     auto box = [&g] (Rectangle<float> r, const juce::String& value, const char* label)
     {

@@ -1,7 +1,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-FourierTruncatorProcessor::FourierTruncatorProcessor()
+ThinampProcessor::ThinampProcessor()
     : AudioProcessor (BusesProperties()
                           .withInput ("Input", juce::AudioChannelSet::stereo(), true)
                           .withOutput ("Output", juce::AudioChannelSet::stereo(), true)),
@@ -12,7 +12,7 @@ FourierTruncatorProcessor::FourierTruncatorProcessor()
     modeParam = apvts.getRawParameterValue ("mode");
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout FourierTruncatorProcessor::createLayout()
+juce::AudioProcessorValueTreeState::ParameterLayout ThinampProcessor::createLayout()
 {
     // Log-scaled so the knob spends as much travel on 1..45 as on 45..2048.
     juce::NormalisableRange<float> nRange {
@@ -40,21 +40,21 @@ juce::AudioProcessorValueTreeState::ParameterLayout FourierTruncatorProcessor::c
     };
 }
 
-void FourierTruncatorProcessor::prepareToPlay (double sampleRate, int)
+void ThinampProcessor::prepareToPlay (double sampleRate, int)
 {
     displaySampleRate.store (sampleRate);
     engine.prepare (getTotalNumOutputChannels());
     setLatencySamples (ft::latencySamples);
 }
 
-bool FourierTruncatorProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ThinampProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
     const auto out = layouts.getMainOutputChannelSet();
     return (out == juce::AudioChannelSet::mono() || out == juce::AudioChannelSet::stereo())
         && out == layouts.getMainInputChannelSet();
 }
 
-void FourierTruncatorProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
+void ThinampProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer&)
 {
     juce::ScopedNoDenormals noDenormals;
 
@@ -65,23 +65,23 @@ void FourierTruncatorProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     engine.process (buffer.getArrayOfWritePointers(), buffer.getNumChannels(), buffer.getNumSamples());
 }
 
-double FourierTruncatorProcessor::getTailLengthSeconds() const
+double ThinampProcessor::getTailLengthSeconds() const
 {
     return ft::fftSize / juce::jmax (1.0, getSampleRate());
 }
 
-juce::AudioProcessorEditor* FourierTruncatorProcessor::createEditor()
+juce::AudioProcessorEditor* ThinampProcessor::createEditor()
 {
-    return new FourierTruncatorEditor (*this);
+    return new ThinampEditor (*this);
 }
 
-void FourierTruncatorProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ThinampProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     if (auto xml = apvts.copyState().createXml())
         copyXmlToBinary (*xml, destData);
 }
 
-void FourierTruncatorProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ThinampProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     if (auto xml = getXmlFromBinary (data, sizeInBytes))
         if (xml->hasTagName (apvts.state.getType()))
@@ -90,5 +90,5 @@ void FourierTruncatorProcessor::setStateInformation (const void* data, int sizeI
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new FourierTruncatorProcessor();
+    return new ThinampProcessor();
 }

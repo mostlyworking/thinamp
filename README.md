@@ -1,21 +1,24 @@
-# Fourier Truncator
+# Thinamp
 
-VST3/AU effect: STFT (4096-point, 75% overlap), keep N of the 2049 Fourier basis functions per frame, resynthesise.
-Two knobs (N, dry/wet) plus four modes: LOW, HIGH, ODD (sparse odd bins), PEAK (strongest N). Winamp 2.x UI.
+A spectral thinning effect with a Winamp 2.x face: turn one knob and the sound is rebuilt from fewer and fewer of
+its Fourier basis functions.
 
-![Fourier Truncator in Ableton Live](docs/screenshot.png)
+Under the hood: STFT (4096-point, 75% overlap), keep N of the 2049 Fourier basis functions per frame, resynthesise.
+Two knobs (N, dry/wet) plus four modes: LOW, HIGH, ODD (sparse odd bins), PEAK (strongest N).
+
+![Thinamp](docs/screenshot.png)
 
 ## Install (Mac)
 
 Open Terminal (Cmd+Space, type "Terminal"), paste this and press Enter:
 
-    curl -fsSL https://raw.githubusercontent.com/mostlyworking/fourier-truncator/main/install.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/mostlyworking/thinamp/main/install.sh | bash
 
 Then restart your DAW or rescan plugins (see below). It installs both formats: VST3 and Audio Unit (AU).
 
-Without Terminal: download `FourierTruncator-mac.zip` from
-[Releases](https://github.com/mostlyworking/fourier-truncator/releases/latest), unzip it, right-click
-"Install Fourier Truncator.command" and choose Open (the plugin isn't notarized by Apple, so a plain double-click is blocked).
+Without Terminal: download `Thinamp-mac.zip` from
+[Releases](https://github.com/mostlyworking/thinamp/releases/latest), unzip it, right-click
+"Install Thinamp.command" and choose Open (the plugin isn't notarized by Apple, so a plain double-click is blocked).
 
 ## Finding it in your DAW
 
@@ -29,7 +32,7 @@ Without Terminal: download `FourierTruncator-mac.zip` from
 | Cubase, Nuendo | VST3 | Restart, or Studio > VST Plug-in Manager to check it's listed |
 | Studio One | VST3 or AU | Restart; new plugins are scanned on startup |
 
-It shows up as "Fourier Truncator" by "Dan Vicente", usually under audio effects or the filter category.
+It shows up as "Thinamp" by "Dan Vicente", usually under audio effects or the filter category.
 If a newly installed AU doesn't appear, log out of macOS and back in once.
 
 ## Behaviour

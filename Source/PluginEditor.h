@@ -35,11 +35,11 @@ private:
     int selected = 0;
 };
 
-class FourierTruncatorEditor final : public juce::AudioProcessorEditor, private juce::Timer
+class ThinampEditor final : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
-    explicit FourierTruncatorEditor (FourierTruncatorProcessor&);
-    ~FourierTruncatorEditor() override;
+    explicit ThinampEditor (ThinampProcessor&);
+    ~ThinampEditor() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -51,7 +51,7 @@ private:
     void drawMarquee (juce::Graphics&);
     void drawReadouts (juce::Graphics&);
 
-    FourierTruncatorProcessor& truncator;
+    ThinampProcessor& truncator;
     WinampLookAndFeel lookAndFeel;
 
     juce::Slider nSlider, mixSlider;
@@ -65,5 +65,5 @@ private:
     juce::String marqueeText;
     float marqueeWidth = 0.0f, marqueeOffset = 0.0f;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FourierTruncatorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ThinampEditor)
 };
