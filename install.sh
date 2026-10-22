@@ -40,10 +40,9 @@ cat <<'DONE'
 
 Fourier Truncator is installed.
 
-In Ableton Live:
-  1. Open Settings > Plug-Ins.
-  2. Turn on "Use VST3 Plug-In System Folders".
-  3. Click "Rescan" (restart Live if it was open).
-  4. Find "Fourier Truncator" under Plug-Ins and drop it on a track.
+Restart your DAW (or rescan plugins) and look for "Fourier Truncator".
+
+Ableton Live: Settings > Plug-Ins, turn on "Use VST3 Plug-In System Folders", click Rescan.
+Other DAWs: https://github.com/mostlyworking/fourier-truncator#finding-it-in-your-daw
 
 DONE
