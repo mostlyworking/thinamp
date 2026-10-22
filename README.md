@@ -3,6 +3,8 @@
 VST3/AU effect: STFT (4096-point, 75% overlap), keep N of the 2049 Fourier basis functions per frame, resynthesise.
 Two knobs (N, dry/wet) plus four modes: LOW, HIGH, ODD (sparse odd bins), PEAK (strongest N). Winamp 2.x UI.
 
+![Fourier Truncator in Ableton Live](docs/screenshot.png)
+
 ## Install (Mac)
 
 Open Terminal (Cmd+Space, type "Terminal"), paste this and press Enter:
