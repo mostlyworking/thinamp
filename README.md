@@ -3,6 +3,18 @@
 VST3/AU effect: STFT (4096-point, 75% overlap), keep N of the 2049 Fourier basis functions per frame, resynthesise.
 Two knobs (N, dry/wet) plus four modes: LOW, HIGH, ODD (sparse odd bins), PEAK (strongest N). Winamp 2.x UI.
 
+## Install (Mac)
+
+Open Terminal (Cmd+Space, type "Terminal"), paste this and press Enter:
+
+    curl -fsSL https://raw.githubusercontent.com/mostlyworking/fourier-truncator/main/install.sh | bash
+
+Then in Ableton: Settings > Plug-Ins, turn on "Use VST3 Plug-In System Folders", click Rescan.
+
+Without Terminal: download `FourierTruncator-mac.zip` from
+[Releases](https://github.com/mostlyworking/fourier-truncator/releases/latest), unzip it, right-click
+"Install Fourier Truncator.command" and choose Open (the plugin isn't notarized by Apple, so a plain double-click is blocked).
+
 ## Behaviour
 
 - Hann-windowed 4096-point STFT, hop 1024; keeping all bins reconstructs the input exactly.
@@ -12,6 +24,8 @@ Two knobs (N, dry/wet) plus four modes: LOW, HIGH, ODD (sparse odd bins), PEAK (
 - Mix 0 is exactly the delayed input. Output does not depend on host block size. Checked by `EngineTests`.
 
 ## Build
+
+Release zip for GitHub: `./scripts/package.sh` (universal arm64 + x86_64, output in `dist/`).
 
     brew install cmake ninja
     cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
