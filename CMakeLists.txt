@@ -12,12 +12,26 @@ FetchContent_Declare(JUCE
     GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(JUCE)
 
+# AU is Mac-only. Copying after build is too: on Windows the VST3 folder is under Program Files and needs admin.
+if(APPLE)
+    set(THINAMP_FORMATS VST3 AU)
+    set(THINAMP_COPY_AFTER_BUILD TRUE)
+else()
+    set(THINAMP_FORMATS VST3)
+    set(THINAMP_COPY_AFTER_BUILD FALSE)
+endif()
+
+# LCD font, embedded so the UI looks the same on every platform (Menlo is Mac-only).
+juce_add_binary_data(ThinampFonts SOURCES
+    Resources/fonts/DejaVuSansMono.ttf
+    Resources/fonts/DejaVuSansMono-Bold.ttf)
+
 juce_add_plugin(Thinamp
     COMPANY_NAME "Dan Vicente"
     BUNDLE_ID com.danvicente.thinamp
     PLUGIN_MANUFACTURER_CODE Dvic
     PLUGIN_CODE FTrn
-    FORMATS VST3 AU
+    FORMATS ${THINAMP_FORMATS}
     PRODUCT_NAME "Thinamp"
     IS_SYNTH FALSE
     NEEDS_MIDI_INPUT FALSE
@@ -25,7 +39,7 @@ juce_add_plugin(Thinamp
     IS_MIDI_EFFECT FALSE
     VST3_CATEGORIES Fx Filter
     AU_MAIN_TYPE kAudioUnitType_Effect
-    COPY_PLUGIN_AFTER_BUILD TRUE)
+    COPY_PLUGIN_AFTER_BUILD ${THINAMP_COPY_AFTER_BUILD})
 
 target_sources(Thinamp PRIVATE
     Source/PluginProcessor.cpp
@@ -38,7 +52,7 @@ target_compile_definitions(Thinamp PUBLIC
     JUCE_VST3_CAN_REPLACE_VST2=0)
 
 target_link_libraries(Thinamp
-    PRIVATE juce::juce_audio_utils juce::juce_dsp
+    PRIVATE ThinampFonts juce::juce_audio_utils juce::juce_dsp
     PUBLIC juce::juce_recommended_config_flags juce::juce_recommended_lto_flags juce::juce_recommended_warning_flags)
 
 # Offline DSP tests: ctest --test-dir build
@@ -56,4 +70,4 @@ target_sources(UiSnapshot PRIVATE tests/UiSnapshot.cpp
     Source/PluginProcessor.cpp Source/PluginEditor.cpp Source/TruncatorEngine.cpp)
 target_compile_definitions(UiSnapshot PRIVATE
     JUCE_WEB_BROWSER=0 JUCE_USE_CURL=0 JUCE_MODAL_LOOPS_PERMITTED=1 JucePlugin_Name="Thinamp")
-target_link_libraries(UiSnapshot PRIVATE juce::juce_audio_utils juce::juce_dsp juce::juce_recommended_config_flags)
+target_link_libraries(UiSnapshot PRIVATE ThinampFonts juce::juce_audio_utils juce::juce_dsp juce::juce_recommended_config_flags)
