@@ -20,6 +20,19 @@ Without Terminal: download `Thinamp-mac.zip` from
 [Releases](https://github.com/mostlyworking/thinamp/releases/latest), unzip it, right-click
 "Install Thinamp.command" and choose Open (the plugin isn't notarized by Apple, so a plain double-click is blocked).
 
+## Install (Windows)
+
+Open PowerShell (Start menu, type "PowerShell"), paste this and press Enter:
+
+    irm https://raw.githubusercontent.com/mostlyworking/thinamp/main/install.ps1 | iex
+
+Windows asks for administrator permission once: VST3 plugins go in `C:\Program Files\Common Files\VST3`.
+Then restart your DAW or rescan plugins (see below). Windows has VST3 only; AU is a Mac format.
+
+Without PowerShell: download `Thinamp-windows.zip` from
+[Releases](https://github.com/mostlyworking/thinamp/releases/latest), unzip it and double-click "Install Thinamp.cmd".
+The plugin isn't code-signed, so if Windows shows "Windows protected your PC", click More info > Run anyway.
+
 ## Finding it in your DAW
 
 | DAW | Format | Steps |
@@ -46,6 +59,7 @@ If a newly installed AU doesn't appear, log out of macOS and back in once.
 ## Build
 
 Release zip for GitHub: `./scripts/package.sh` (universal arm64 + x86_64, output in `dist/`).
+The Windows zip is built by GitHub Actions (`.github/workflows/windows.yml`); publishing a release attaches it.
 
     brew install cmake ninja
     cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
