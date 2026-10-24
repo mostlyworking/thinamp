@@ -1,4 +1,5 @@
 #include "PluginEditor.h"
+#include <BinaryData.h>
 
 using juce::Colour;
 using juce::ColourGradient;
@@ -27,7 +28,11 @@ const char* const modeLongNames[] = { "LOW HARMONICS", "HIGH HARMONICS", "SPARSE
 
 juce::Font lcdFont (float size, bool bold = true)
 {
-    return juce::Font (juce::FontOptions ("Menlo", size, bold ? juce::Font::bold : juce::Font::plain));
+    static const auto regular = juce::Typeface::createSystemTypefaceFor (BinaryData::DejaVuSansMono_ttf,
+                                                                         BinaryData::DejaVuSansMono_ttfSize);
+    static const auto boldFace = juce::Typeface::createSystemTypefaceFor (BinaryData::DejaVuSansMonoBold_ttf,
+                                                                          BinaryData::DejaVuSansMonoBold_ttfSize);
+    return juce::Font (juce::FontOptions (bold ? boldFace : regular).withHeight (size));
 }
 
 // Raised (light top-left) or sunken (dark top-left) edge of thickness t.

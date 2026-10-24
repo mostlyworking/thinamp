@@ -1,0 +1,41 @@
+name: Windows build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -A x64
+
+      - name: Build
+        run: cmake --build build --config Release --parallel --target Thinamp_VST3 EngineTests UiSnapshot
+
+      - name: Engine tests
+        run: build/EngineTests_artefacts/Release/EngineTests.exe
+
+      - name: UI snapshot
+        run: build/UiSnapshot_artefacts/Release/UiSnapshot.exe ui-windows.png 3 64
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory dist | Out-Null
+          Compress-Archive -Path build/Thinamp_artefacts/Release/VST3/Thinamp.vst3 -DestinationPath dist/Thinamp-windows.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Thinamp-windows
+          path: dist/Thinamp-windows.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ui-snapshot-windows
+          path: ui-windows.png

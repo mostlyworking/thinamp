@@ -27,7 +27,7 @@ std::vector<float> sines (std::initializer_list<std::pair<double, double>> freqA
     std::vector<float> x ((size_t) length, 0.0f);
     for (auto [f, a] : freqAmp)
         for (int t = 0; t < length; ++t)
-            x[(size_t) t] += (float) (a * std::sin (2.0 * M_PI * f * t / fs));
+            x[(size_t) t] += (float) (a * std::sin (juce::MathConstants<double>::twoPi * f * t / fs));
     return x;
 }
 
@@ -51,7 +51,7 @@ double amplitudeAt (const std::vector<float>& y, double freq)
     const int start = 4 * ft::fftSize, length = 8 * ft::fftSize;
     std::complex<double> acc;
     for (int t = start; t < start + length; ++t)
-        acc += (double) y[(size_t) t] * std::polar (1.0, -2.0 * M_PI * freq * t / fs);
+        acc += (double) y[(size_t) t] * std::polar (1.0, -juce::MathConstants<double>::twoPi * freq * t / fs);
     return 2.0 * std::abs (acc) / length;
 }
 
